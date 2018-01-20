@@ -17,7 +17,7 @@ import sys
 import hashlib
 import glob
 from os import listdir
-from os.path import isfile, join, getsize
+from os.path import isfile, join, getsize, basename
 
 
 class TargetFile(object):
@@ -70,9 +70,7 @@ def checkName (targetFile, fileList):
         print ("No duplicated files.")
     else:
         for file in fileList:
-            auxFileName = file.split("/")
-            fileName = auxFileName[len(auxFileName)-1]
-            if targetFile.fileName == fileName:
+            if targetFile.fileName == os.path.basename(file):
                 print ("Duplicated file (SAME NAME) in: " + os.path.abspath(file))
             else:
                 print ("Duplicated file (DIFFERENT NAME) in: " + os.path.abspath(file))
@@ -80,7 +78,11 @@ def checkName (targetFile, fileList):
 def main():
     userData = parse()
     target = str(", ".join(userData.file))
-    tf = TargetFile(target)
+    try: 
+        tf = TargetFile(target)
+    except: 
+        print("This file does not exist.", sys.exc_info()[0])
+        sys.exit(1)
     files = []
     if userData.recursive:
         files = candidatesR(tf)
