@@ -5,6 +5,7 @@ __copyright__ = "Copyright 2018, Victor Nieves Sanchez"
 __credits__ = ["Victor Nieves Sanchez"]
 __license__ = "GPL"
 __version__ = "2.0.0"
+__python__= "3.6.4"
 __maintainer__ = "Victor Nieves Sanchez"
 __email__ = "vnievess@gmail.com"
 __status__ = "Production"
@@ -33,11 +34,11 @@ class TargetFile(object):
         self.fileMd5 = hashlib.md5(open(self.filePath, 'rb').read()).hexdigest()
 
 def parse():
-    parser = argparse.ArgumentParser(description='Search if there are duplicate files of the desired file.')
-    parser.add_argument('file', nargs='+', help='File Name')
-    parser.add_argument('path', nargs='?', default=os.getcwd(), help='Source path.')
+    parser = argparse.ArgumentParser(description='search if there are duplicate files of the desired file.')
+    parser.add_argument('file', nargs='+', help='file Name')
+    parser.add_argument('path', nargs='?', default=os.getcwd(), help='source path')
     #parser.add_argument('path', default=os.getcwd(), help='Search into directories', action='store_true')
-    parser.add_argument('-r', '--recursive', default=False, action='store_true', help='Search into directories',
+    parser.add_argument('-r', '--recursive', default=False, action='store_true', help='search into directories',
                         dest='recursive')
     return parser.parse_args()
 
@@ -81,7 +82,7 @@ def main():
     try: 
         tf = TargetFile(target)
     except: 
-        print("This file does not exist.", sys.exc_info()[0])
+        print("ERROR: This file does not exist.", sys.exc_info()[0])
         sys.exit(1)
     files = []
     if userData.recursive:
