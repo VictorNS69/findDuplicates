@@ -45,7 +45,7 @@ def parse():
 def candidatesR (targetFile, path):
     print ("RECURSIVE SEARCH")
     candidates = []
-    for file in glob.glob(path +'/**', recursive =True):
+    for file in glob.glob(path + '/**', recursive =True):
         if targetFile.fileSize == os.path.getsize (file) and\
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
             candidates.append(os.path.abspath(file))
@@ -57,7 +57,7 @@ def candidatesR (targetFile, path):
 def candidatesNoR(targetFile, path):
     candidates = []
     print ("NON-RECURSIVE SEARCH")
-    for file in glob.glob(path, recursive=False):
+    for file in glob.glob(path + '/*', recursive=False):
         if targetFile.fileSize == os.path.getsize(file) and \
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
             candidates.append(os.path.abspath(file))
