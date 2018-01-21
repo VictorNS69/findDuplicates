@@ -45,24 +45,22 @@ def parse():
 def candidatesR (targetFile, path):
     print ("RECURSIVE SEARCH")
     candidates = []
-    for file in glob.glob(path + '/**', recursive =True):
+    for file in glob.glob(path +'/**', recursive =True):
         if targetFile.fileSize == os.path.getsize (file) and\
-                        targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
+                        targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest() and\
+                        targetFile.filePath != os.path.abspath(file):
             candidates.append(os.path.abspath(file))
-    if len(candidates) > 0:
-        candidates.remove(targetFile.filePath)
     return candidates
 
 '''Non-recursive'''
 def candidatesNoR(targetFile, path):
     candidates = []
     print ("NON-RECURSIVE SEARCH")
-    for file in glob.glob(path + '/*', recursive=False):
+    for file in glob.glob(path+'/*', recursive=False):
         if targetFile.fileSize == os.path.getsize(file) and \
-                        targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
+                        targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest() and\
+                        targetFile.filePath != os.path.abspath(file):
             candidates.append(os.path.abspath(file))
-    if len(candidates) > 0:
-        candidates.remove(targetFile.filePath)
     return candidates
 
 def checkName (targetFile, fileList):
@@ -80,7 +78,7 @@ def main():
     try:
         tf = TargetFile(userData.file)
     except:
-        print("ERROR: This file does not exist.", sys.exc_info()[0])
+        print("ERROR: ", sys.exc_info()[0])
         sys.exit(1)
     files = []
     if userData.recursive:
