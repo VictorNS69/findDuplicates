@@ -30,40 +30,39 @@ class TargetFile(object):
     def __init__(self, file):
         self.fileName = file
         self.filePath = os.path.abspath(file)
-        self.fileSize = os.path.getsize(self.filePath)
+        self.fileSize = os.path.getsize(os.path.abspath(file))
         self.fileMd5 = hashlib.md5(open(self.filePath, 'rb').read()).hexdigest()
 
 def parse():
     parser = argparse.ArgumentParser(description='search if there are duplicate files of the desired file.')
-    parser.add_argument('file', nargs='+', help='file Name')
-    parser.add_argument('path', nargs='?', default=os.getcwd(), help='source path')
-    #parser.add_argument('path', default=os.getcwd(), help='Search into directories', action='store_true')
+    parser.add_argument('file', help='file name')
+    parser.add_argument('path', nargs='?', default=os.getcwd(), action="store", help='source path')
     parser.add_argument('-r', '--recursive', default=False, action='store_true', help='search into directories',
                         dest='recursive')
     return parser.parse_args()
 
 '''Recursive'''
-def candidatesR (targetFile):
+def candidatesR (targetFile, path):
     print ("RECURSIVE SEARCH")
     candidates = []
-    allFiles = glob.glob('**/*', recursive =True)
-    for file in allFiles:
+    for file in glob.glob(path +'/**', recursive =True):
         if targetFile.fileSize == os.path.getsize (file) and\
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
             candidates.append(os.path.abspath(file))
-    candidates.remove(targetFile.filePath)
+    if len(candidates) > 0:
+        candidates.remove(targetFile.filePath)
     return candidates
 
 '''Non-recursive'''
-def candidatesNoR(targetFile):
+def candidatesNoR(targetFile, path):
     candidates = []
     print ("NON-RECURSIVE SEARCH")
-    allFiles = glob.glob('*', recursive=False)
-    for file in allFiles:
+    for file in glob.glob(path, recursive=False):
         if targetFile.fileSize == os.path.getsize(file) and \
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest():
             candidates.append(os.path.abspath(file))
-    candidates.remove(targetFile.filePath)
+    if len(candidates) > 0:
+        candidates.remove(targetFile.filePath)
     return candidates
 
 def checkName (targetFile, fileList):
@@ -78,17 +77,16 @@ def checkName (targetFile, fileList):
 
 def main():
     userData = parse()
-    target = str(", ".join(userData.file))
-    try: 
-        tf = TargetFile(target)
-    except: 
+    try:
+        tf = TargetFile(userData.file)
+    except:
         print("ERROR: This file does not exist.", sys.exc_info()[0])
         sys.exit(1)
     files = []
     if userData.recursive:
-        files = candidatesR(tf)
+        files = candidatesR(tf, userData.path)
     elif not userData.recursive:
-        files = candidatesNoR(tf)
+        files = candidatesNoR(tf, userData.path)
 
     checkName(tf, files)
     sys.exit(0)
