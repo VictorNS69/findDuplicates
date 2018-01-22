@@ -6,9 +6,7 @@ __credits__ = ["Victor Nieves Sanchez"]
 __license__ = "GPL"
 __version__ = "2.0.0"
 __python__= "3.6.4"
-__maintainer__ = "Victor Nieves Sanchez"
 __email__ = "vnievess@gmail.com"
-__status__ = "Production"
 
 '''this program will print on the screen the duplicate files of the desired file. '''
 
