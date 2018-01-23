@@ -15,8 +15,7 @@ import os
 import sys
 import hashlib
 import glob
-from os import listdir
-from os.path import isfile, join, getsize, basename
+from os.path import getsize, basename
 
 
 class TargetFile(object):
