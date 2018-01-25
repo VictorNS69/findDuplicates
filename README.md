@@ -6,7 +6,7 @@ Print on the screen the duplicate files of the desired file.
 
 ### Usage
 ```
-usage: main.py [-h] [-r] file [path]
+usage: findDuplicates.py [-h] [-r] file [path]
 
 search if there are duplicate files of the desired file.
 
