@@ -45,7 +45,7 @@ def candidatesR (targetFile, path):
     for file in glob.glob(path +'/**', recursive =True):
         if targetFile.fileSize == os.path.getsize (file) and\
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest() and\
-                        targetFile.filePath != os.path.abspath(file):
+                        targetFile.filePath != os.path.abspath(file) and not os.path.islink(file):
             candidates.append(os.path.abspath(file))
     return candidates
 
@@ -56,7 +56,7 @@ def candidatesNoR(targetFile, path):
     for file in glob.glob(path+'/*', recursive=False):
         if targetFile.fileSize == os.path.getsize(file) and \
                         targetFile.fileMd5 == hashlib.md5(open(file, 'rb').read()).hexdigest() and\
-                        targetFile.filePath != os.path.abspath(file):
+                        targetFile.filePath != os.path.abspath(file) and not os.path.islink(file):
             candidates.append(os.path.abspath(file))
     return candidates
 
