@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-__author__ = "Victor Nieves Sanchez"
-__copyright__ = "Copyright 2018, Victor Nieves Sanchez"
-__credits__ = ["Victor Nieves Sanchez"]
-__license__ = "GPL"
-__version__ = "2.0.0"
-__python__= "3.6.4"
-__email__ = "vnievess@gmail.com"
+__AUTHOR__ = "Victor Nieves Sanchez"
+__COPYRIGHT__ = "Copyright 2018, Victor Nieves Sanchez"
+__CREDITS__ = ["Victor Nieves Sanchez", "Tobias Diaz"]
+__LICENSE__ = "GPL"
+__VERSION__ = "3.0.0"
+__PYTHON__= "3.6.4"
+__EMAIL__ = "vnievess@gmail.com"
 
 '''this program will print on the screen the duplicate files of the desired file. '''
 
@@ -65,7 +65,7 @@ class FileSet(object):
     def __init__(self, root_folder, recursive=False):
         self.__root = root_folder
         self.__recursive = recursive
-        self._rebuild_file_list_()
+        self.__rebuild_file_list__()
 
     @property
     def root(self):
@@ -74,17 +74,17 @@ class FileSet(object):
     @root.setter
     def root(self, new_root):
         self.__root = new_root
-        self._rebuild_file_list_()
+        self.__rebuild_file_list__()
 
     @property
     def files(self):
         return self.__candidates
 
-    def _rebuild_file_list_(self):
+    def __rebuild_file_list__(self):
         self.__candidates = []
-        self._make_candidates_(self.__recursive)
+        self.__make_candidates__(self.__recursive)
 
-    def _make_candidates_(self, recursive):
+    def __make_candidates__(self, recursive):
         for filename in glob.glob(os.path.join(self.root, '**' if recursive else '*'), recursive=recursive):
             filename = os.path.abspath(filename)
             if os.path.islink(filename):
@@ -115,19 +115,27 @@ class FileSet(object):
 def parse():
     parser = argparse.ArgumentParser(description='search if there are duplicate files of the desired file.')
     parser.add_argument('file', help='file name')
-    parser.add_argument('path', nargs='?', default=os.getcwd(), action="store", help='source path')
-    parser.add_argument('-r', '--recursive', default=False, action='store_true', help='search into directories',
+    parser.add_argument('path', nargs='?', default=os.getcwd(),
+                        action="store", help='source path')
+    parser.add_argument('-r', '--recursive', default=False,
+                        action='store_true', help='search into directories',
                         dest='recursive')
-    parser.add_argument('-p', '--pretty-output', default=False, action='store_true', help='show pretty output',
+    parser.add_argument('-p', '--pretty-output', default=False,
+                        action='store_true', help='show pretty output',
                         dest='pretty_output')
-    parser.add_argument('--debug', default=False, action='store_true', help='be verbose',
+    parser.add_argument('--debug', default=False, action='store_true',
+                        help='be verbose',
                         dest='debug')
-    parser.add_argument('--version', action='version', version=__version__)
+    parser.add_argument('--version', action='version', version=__VERSION__)
     
     return parser.parse_args()
 
 
-def show_pretty(duplicates):
+def show_pretty(duplicates, recursive):
+    if recursive:
+        print("Recursive search.")
+    else:
+        print("Non-recursive search.")
     if len(duplicates) > 0:
         print('Duplicates files found:')
         for f in duplicates:
@@ -152,7 +160,7 @@ def main():
     equals = list(filter(lambda f: f == target, candidates))
 
     if userData.pretty_output:
-        show_pretty(equals)
+        show_pretty(equals, userData.recursive)
     else:
         # Show output
         for f in equals:
