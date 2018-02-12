@@ -20,4 +20,4 @@ setup(name='Find Duplicates',
 	url='https://github.com/VictorNS69',
 	license=__LICENSE__,
 	packages=['main'],
-	packages_dir={'main': 'src'},)
+	package_dir={'main': 'src'},)
