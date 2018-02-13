@@ -9,7 +9,6 @@ __PYTHON__= "3.6.4"
 __EMAIL__ = "vnievess@gmail.com"
 
 
-from distutils.core import setup
 from setuptools import setup
 
 setup(name='Find Duplicates',
@@ -17,7 +16,9 @@ setup(name='Find Duplicates',
 	description='Search if there are duplicate files of the desired file.',
 	author=__AUTHOR__,
 	author_email=__EMAIL__,
-	url='https://github.com/VictorNS69',
+	url='https://github.com/VictorNS69/findDuplicates',
 	license=__LICENSE__,
-	packages=['main'],
+	classifiers=['Programming Language :: Python :: 3.5'],
+	packages=['src'],
 	package_dir={'main': 'src'},)
+
