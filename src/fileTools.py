@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+
 
 __AUTHOR__ = "Victor Nieves Sanchez"
 __COPYRIGHT__ = "Copyright 2018, Victor Nieves Sanchez"
@@ -8,16 +8,13 @@ __VERSION__ = "3.0.0"
 __PYTHON__= "3.6.4"
 __EMAIL__ = "vnievess@gmail.com"
 
-'''this program will print on the screen the duplicate files of the desired file. '''
 
-import argparse
-import os
-import sys
 import hashlib
-import glob
-from os.path import getsize, basename
 import os.path
+import os
+import glob
 import logging
+from os.path import getsize
 
 _DEB = logging.debug
 _ERR = logging.error
@@ -58,7 +55,6 @@ class FileInfo(object):
 
     def __str__(self):
         return self.name
-
 
 class FileSet(object):
     '''Computes file list to allow quick search'''
@@ -112,64 +108,3 @@ class FileSet(object):
         self.__candidates.remove(filename)
 
 
-def parse():
-    parser = argparse.ArgumentParser(description='search if there are duplicate files of the desired file.')
-    parser.add_argument('file', help='file name')
-    parser.add_argument('path', nargs='?', default=os.getcwd(),
-                        action="store", help='source path')
-    parser.add_argument('-r', '--recursive', default=False,
-                        action='store_true', help='search into directories',
-                        dest='recursive')
-    parser.add_argument('-p', '--pretty-output', default=False,
-                        action='store_true', help='show pretty output',
-                        dest='pretty_output')
-    parser.add_argument('--debug', default=False, action='store_true',
-                        help='be verbose',
-                        dest='debug')
-    parser.add_argument('--version', action='version', version=__VERSION__)
-    
-    return parser.parse_args()
-
-
-def show_pretty(duplicates, recursive):
-    if recursive:
-        print("Recursive search.")
-    else:
-        print("Non-recursive search.")
-    if len(duplicates) > 0:
-        print('Duplicates files found:')
-        for f in duplicates:
-            print('\t%s' % f)
-
-
-def main():
-    userData = parse()
-    try:
-        target = FileInfo(userData.file)
-    except OSError as e:
-        _ERR("Error reading file %s: %s" % (userData.file, e))
-        sys.exit(1)
-        
-    files = FileSet(userData.path, userData.recursive)
-    try:
-        files.remove(target.name)
-    except ValueError:
-        pass
-        
-    candidates = [FileInfo(f) for f in files.search_by_size(target.size)]
-    equals = list(filter(lambda f: f == target, candidates))
-
-    if userData.pretty_output:
-        show_pretty(equals, userData.recursive)
-    else:
-        # Show output
-        for f in equals:
-            print(str(f))
-    sys.exit(0)
-
-
-if __name__ == "__main__":
-    logging.basicConfig(
-        format='%(asctime)s %(levelname)s %(message)s',
-        level=logging.DEBUG if '--debug' in sys.argv else logging.INFO)
-    main()

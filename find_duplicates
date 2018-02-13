@@ -14,8 +14,7 @@ import argparse
 import os
 import sys
 import logging
-import FileSet
-import FileInfo
+from fileTools import FileInfo, FileSet
 
 _DEB = logging.debug
 _ERR = logging.error
@@ -57,19 +56,19 @@ def show_pretty(duplicates, recursive):
 def main():
     userData = parse()
     try:
-        target = FileInfo.FileInfo(userData.file)
+        target = FileInfo(userData.file)
     except OSError as e:
         _ERR("Error reading file %s: %s" % (userData.file, e))
         sys.exit(1)
         
-    files = FileSet.FileSet(userData.path, userData.recursive)
+    files = FileSet(userData.path, userData.recursive)
     try:
         files.remove(userData.file)
         #FileSet.remove(userData.file)
     except ValueError:
         pass
         
-    candidates = [FileInfo.FileInfo(f) for f in files.search_by_size(target.size)]
+    candidates = [FileInfo(f) for f in files.search_by_size(target.size)]
     equals = list(filter(lambda f: f == target, candidates))
 
     if userData.pretty_output:

@@ -19,6 +19,6 @@ setup(name='Find Duplicates',
 	url='https://github.com/VictorNS69/findDuplicates',
 	license=__LICENSE__,
 	classifiers=['Programming Language :: Python :: 3.5'],
-	packages=['src'],
-	package_dir={'main': 'src'},)
+	packages=['fileTools'],
+	package_dir={'fileTools':'src/'},)
 
