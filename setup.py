@@ -20,5 +20,5 @@ setup(name='Find Duplicates',
 	license=__LICENSE__,
 	classifiers=['Programming Language :: Python :: 3.5'],
 	packages=['fileTools'],
-	package_dir={'fileTools':'src/'},)
+	package_dir={"fileTools":"fileTools/"},)
 
