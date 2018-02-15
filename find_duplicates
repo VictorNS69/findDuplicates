@@ -8,6 +8,9 @@ __VERSION__ = "3.0.0"
 __PYTHON__= "3.6.4"
 __EMAIL__ = "vnievess@gmail.com"
 
+
+
+
 '''this program will print on the screen the duplicate files of the desired file. '''
 
 import argparse
@@ -56,19 +59,19 @@ def show_pretty(duplicates, recursive):
 def main():
     userData = parse()
     try:
-        target = fileTools.FileInfo(userData.file)
+        target = fileTools.fileTools.FileInfo(userData.file)
     except OSError as e:
         _ERR("Error reading file %s: %s" % (userData.file, e))
         sys.exit(1)
         
-    files = fileTools.FileSet(userData.path, userData.recursive)
+    files = fileTools.fileTools.FileSet(userData.path, userData.recursive)
     try:
         files.remove(userData.file)
         #FileSet.remove(userData.file)
     except ValueError:
         pass
         
-    candidates = [fileTools.FileInfo(f) for f in files.search_by_size(target.size)]
+    candidates = [fileTools.fileTools.FileInfo(f) for f in files.search_by_size(target.size)]
     equals = list(filter(lambda f: f == target, candidates))
 
     if userData.pretty_output:
